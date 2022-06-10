@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Student Assistant Portal | CoDE-UCC</title>
     <link rel="stylesheet" href="style/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+
 </head>
+
 <body>
 
 
-    <div class="container" >
+    <div class="container">
         <!-- code here -->
         <div class="card">
-            <div class="card-image">	
+            <div class="card-image">
                 <h2 class="card-heading">
                     Student Assistant Portal
                     <small>CoDE - UCC</small>
@@ -21,24 +30,27 @@
             </div>
 
             <div class="option-box">
-                <button id="openAccess" >Access Modules</button>
-                <button id="openComp">Make Complaint</button>
+                <button id="openAccess" class="active">Access Modules</button>
+                <button id="openComp" >Make Complaint</button>
             </div>
-        
+
 
             <div class="form-container" id="access_module">
+                <div class="form-heading">
+                    <h1>Access Module Form</h1>
+                </div>
 
                 <form class="card-form">
                     <div class="input">
-                        <input type="text" name="name" class="input-field"  required/>
+                        <input type="text" name="name" class="input-field" required />
                         <label class="input-label">Full name</label>
                     </div>
-                                <div class="input">
-                        <input type="text" class="input-field" required/>
+                    <div class="input">
+                        <input type="text" class="input-field" required />
                         <label class="input-label" name="email">Email</label>
                     </div>
                     <div class="input">
-                        <input type="password" name = "registration_number" class="input-field" required/>
+                        <input type="text" name="registration_number" class="input-field" required />
                         <label class="input-label">Registration Number</label>
                     </div>
 
@@ -50,36 +62,41 @@
                             <option value="Business">Business</option>
                             <option value="Arts and Social">Arts and Social</option>
                         </select>
-    
+
                     </div>
 
                     <div class="action">
                         <button class="action-button">Submit</button>
                     </div>
-                </form>    
+                </form>
             </div>
 
 
 
             <div class="form-container" id="compliant">
 
+                <div class="form-heading">
+                    <h1>Complaint Form</h1>
+                </div>
+
+
                 <form class="card-form">
                     <div class="input">
-                        <input type="text" name="name" class="input-field"  required/>
+                        <input type="text" name="name" class="input-field" required />
                         <label class="input-label">Full name</label>
                     </div>
-                                <div class="input">
-                        <input type="text" class="input-field" required/>
+                    <div class="input">
+                        <input type="text" class="input-field" required />
                         <label class="input-label" name="email">Email</label>
                     </div>
                     <div class="input">
-                        <input type="password" name = "registration_number" class="input-field" required/>
+                        <input type="text" name="registration_number" class="input-field" required />
                         <label class="input-label">Registration Number</label>
                     </div>
 
                     <div class="input dropdown">
                         <label for="programtypr" class="input-label">Program Type</label>
-                        <select name="programtype" id="program" class="input-field">
+                        <select name="programtype" id="program" class="input-field" required>
                             <option value="French">French</option>
                             <option value="Ghanaian Language">Ghanaian Language</option>
                         </select>
@@ -87,7 +104,7 @@
 
                     <div class="input dropdown">
                         <label for="course" class="input-label">Course</label>
-                        <select name="course" id="program" class="input-field">
+                        <select name="course" id="program" class="input-field" required>
                             <option value="1">Course 1</option>
                             <option value="2">Course 2</option>
                         </select>
@@ -95,7 +112,7 @@
 
                     <div class="input dropdown">
                         <label for="course" class="input-label">Study Center</label>
-                        <select name="course" id="program" class="input-field">
+                        <select name="course" id="program" class="input-field" required>
                             <option value="1">Center 1</option>
                             <option value="2">Center 2</option>
                         </select>
@@ -103,15 +120,16 @@
 
                     <div class="input">
                         <label for="complain_msg">Complaint</label>
-                        <textarea name="complaint-msg" id="complaint_msg" cols="30" rows="10" class="input-field" placeholder="Type complaint here"></textarea>
+                        <textarea name="complaint_msg" id="complaint_msg" cols="30" rows="10" class="input-field"
+                            placeholder="Type complaint here" required></textarea>
                     </div>
 
                     <div class="action">
-                        <button class="action-button">Submit</button>
+                        <button type="submit" class="action-button">Submit</button>
                     </div>
 
                 </form>
-    
+
             </div>
 
         </div>
@@ -123,7 +141,8 @@
 
     </div>
 
-    
+
 </body>
-<script src="js/app.js"></script>
+<script src="js/index.js"></script>
+
 </html>

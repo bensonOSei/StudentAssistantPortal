@@ -6,9 +6,11 @@ $bordeColor: #eee;
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
-*, *:after, *:before {
+*,
+*:after,
+*:before {
 	box-sizing: border-box;
-    
+
 }
 
 body {
@@ -32,11 +34,11 @@ input {
 
 
 .container {
-    overflow: hidden;
+	overflow: hidden;
 }
 
 #complaint {
-    display: none;
+	display: none;
 }
 
 .card {
@@ -44,7 +46,7 @@ input {
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	max-width: 425px;
+	max-width: 540px;
 	background-color: #FFF;
 	border-radius: 10px;
 	box-shadow: 0 10px 20px 0 rgba(#999, .25);
@@ -70,8 +72,9 @@ input {
 	right: 10%;
 	font-size: 1.75rem;
 	font-weight: 700;
-	color: $color1;
+	color: $color2;
 	line-height: 1.222;
+
 	small {
 		display: block;
 		font-size: .75em;
@@ -84,25 +87,39 @@ input {
 	padding: 2rem 1rem 0;
 }
 
+
+.form-heading{
+	display: grid;
+	place-items: center;
+}
+
+
 .input {
 	display: flex;
 	flex-direction: column;
 	position: relative;
 	padding-top: 1.5rem;
+
 	&+.input {
 		margin-top: 1.5rem;
 	}
 }
 
 .dropdown {
-    label{
-        top: -2px;
-    }
+	label {
+		top: -2px;
+
+		&:focus {
+			color: $color2;
+		}
+
+	}
+
 }
 
-select option{
-    background-color: $color2;
-    color: white;
+select option {
+	background-color: $color2;
+	color: white;
 }
 
 
@@ -118,19 +135,30 @@ select option{
 	border: 0;
 	z-index: 1;
 	background-color: transparent;
-	border-bottom: 2px solid $bordeColor; 
+	border-bottom: 2px solid $bordeColor;
 	font: inherit;
 	font-size: 1.125rem;
 	padding: .25rem 0;
-	&:focus, &:valid {
+
+	&:focus,
+	&:valid {
 		outline: 0;
 		border-bottom-color: $color2;
+
 		&+.input-label {
 			color: #6658d3;
 			transform: translateY(-1.5rem);
 		}
 	}
+
 }
+
+textarea.input-field {
+	background-color: $color3;
+	padding: 10px;
+	border-radius: 10px;
+}
+
 
 .action {
 	margin-top: 2rem;
@@ -146,7 +174,8 @@ select option{
 	border-radius: 6px;
 	color: #FFF;
 	border: 0;
-    cursor: pointer;
+	cursor: pointer;
+
 	&:focus {
 		outline: 0;
 	}
@@ -157,6 +186,7 @@ select option{
 	text-align: center;
 	font-size: .875rem;
 	color: #8597a3;
+
 	a {
 		display: block;
 		color: #6658d3;
@@ -165,45 +195,48 @@ select option{
 }
 
 .active {
-    font-size: larger;
+	font-size: larger;
+	//background-color: #12047e;
 }
 
-.option-box{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
+.option-box {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 20px;
 
-    button {
-        padding: 10px;
-        background-color: $color2;
-        border: none;
-        color: $color3;
-        margin: 2px;
-        border-radius: 5px;
-        transition: all .2s ease-in-out;
-        cursor: pointer;
+	button {
+		//font: inherit;
+		font-weight: 500;
+		border-radius: 6px;
+		padding: 10px;
+		background-color: $color2;
+		border: none;
+		color: $color3;
+		margin: 2px;
+		border-radius: 100mv;
+		transition: all .2s ease-in-out;
+		cursor: pointer;
 
-        
 
-        &:hover {
-            background-color: #12047e;
-        }
-    }
+
+		&:hover {
+			background-color: #12047e;
+		}
+	}
+	
 }
 
 #access_module {
-    //height: 0;
-    overflow: hidden;
-    transition: all .5s ease-in-out;
+	overflow: hidden;
+	transition: all .5s ease-in-out;
 
 
 }
 
 #compliant {
-    height: 0;
-    overflow: hidden;
-    transition: all .5s ease-in-out;
+	display: none;
+	overflow: hidden;
+	transition: all .5s ease-in-out;
 
 }
-

@@ -1,7 +1,7 @@
 var accessModuleForm = document.getElementById("access_module");
 var accesModuleBtn = document.getElementById('openAccess');
 var complaintBtn = document.getElementById("openComp");
-var complaintForm = document.getElementById("compliant");
+var complaintForm = document.getElementById("complaint");
 
 let openMenu = false;
 
