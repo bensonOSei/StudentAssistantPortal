@@ -1,4 +1,5 @@
-#github action for all python files to the main branch
+#github action for all python files pushed to the main and api branches
+#and pull_request to the main branch
 
 #Author: Eng. Michael Kofi Armah
 #Date Created: 11/06/22
@@ -32,8 +33,6 @@ jobs:
         filters: |  # we won't run against on non-existent files which may cause runtime error
           py_modified:  
           - added|modified: "./**/*.py"
-          
-
       
     - name: Python Set up 
       if: ${{ steps.filter.outputs.py_modified == 'true' }}
@@ -52,12 +51,10 @@ jobs:
       if: ${{ steps.filter.outputs.py_modified == 'true' }}
       run: pip install -r requirements.txt
       
-      
     - name: Autop8p #run autopep8 on only modified or added python files
       if: ${{ steps.filter.outputs.py_modified == 'true' }} 
       run: |
         autopep8 --in-place --aggressive --aggressive ${{ steps.filter.outputs.py_modified_files }}
-      
       
     - name: Analysing the code with pylint #pylint get applied to newly added and modified files only
       if: ${{ steps.filter.outputs.py_modified == 'true' }}
