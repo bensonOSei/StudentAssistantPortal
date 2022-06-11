@@ -21,6 +21,8 @@ jobs:
     runs-on: ubuntu-latest #runs on ubuntu's latest os
     
     steps:
+    - name: Checkout  
+      uses: actions/checkout@v2
     
     - name: Get changed files
       uses: dorny/paths-filter@v2  
@@ -31,8 +33,7 @@ jobs:
           py_modified:  
           - added|modified: "./**/*.py"
           
-    - name: Checkout  
-      uses: actions/checkout@v2
+
       
     - name: Python Set up 
       if: ${{ steps.filter.outputs.py_modified == 'true' }}
