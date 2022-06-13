@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import re
 from fastapi.responses import JSONResponse
 
