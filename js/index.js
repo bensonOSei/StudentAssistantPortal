@@ -8,7 +8,6 @@ $(document).ready(function () {
 
       $("#access_module").toggle();
     });
-
   });
 
   $("#openAccess").click(() => {
@@ -18,6 +17,13 @@ $(document).ready(function () {
 
       $("#complaint").toggle();
     });
+  });
 
+  $("#dark").click(() => {
+    $("body").toggleClass("dark-mode");
+    $(".card").toggleClass("dark-mode");
+
+    $("#dark i").toggleClass("fa-sun");
+    $("#dark").toggleClass("dark-mode");
   });
 });
