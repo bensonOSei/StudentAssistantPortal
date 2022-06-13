@@ -1,0 +1,31 @@
+@media screen and(max-width: 480px) {
+    body{
+        padding: 0;
+    }
+
+    .card {
+        display: block;
+        //background-color: red;
+        margin: 0;
+        width: 100%;
+    }
+    
+
+    .card-heading {
+        position: absolute;
+        left: 10%;
+        top: 15%;
+        right: 10%;
+        font-size: 1.3rem;
+        font-weight: 700;
+        color: $color2;
+        line-height: 1.222;
+    
+        small {
+            display: block;
+            font-size: .9em;
+            font-weight: 400;
+            margin-top: .25em;
+        }
+    }
+    }

@@ -35,6 +35,7 @@ input {
 
 .container {
 	overflow: hidden;
+
 }
 
 #complaint {
@@ -42,7 +43,7 @@ input {
 }
 
 .card {
-	margin: 2rem auto;
+	margin: 1rem auto;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
@@ -89,8 +90,11 @@ input {
 
 
 .form-heading{
-	display: grid;
-	place-items: center;
+	width: 100%;
+	h1{
+		text-align: center;
+		font-size: 1.5rem;
+	}
 }
 
 
@@ -195,7 +199,7 @@ textarea.input-field {
 }
 
 .active {
-	font-size: larger;
+	font-size: 1.2em;
 	//background-color: #12047e;
 }
 
@@ -203,10 +207,10 @@ textarea.input-field {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	padding: 20px;
+	padding: 10px;
 
 	button {
-		//font: inherit;
+		font-family: "DM Sans", sans-serif;
 		font-weight: 500;
 		border-radius: 6px;
 		padding: 10px;
@@ -234,9 +238,11 @@ textarea.input-field {
 
 }
 
-#compliant {
+#complaint {
 	display: none;
 	overflow: hidden;
 	transition: all .5s ease-in-out;
 
 }
+
+@import 'mediaQueries'

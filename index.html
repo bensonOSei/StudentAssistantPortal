@@ -40,63 +40,63 @@
                     <h1>Access Module Form</h1>
                 </div>
 
-                <form class="card-form">
+                <form action="accessmodules" method="post" class="card-form">
                     <div class="input">
                         <input type="text" name="name" class="input-field" required />
-                        <label class="input-label">Full name</label>
+                        <label class="input-label">Full Name</label>
                     </div>
                     <div class="input">
-                        <input type="text" class="input-field" required />
+                        <input type="text" name="email" class="input-field" required />
                         <label class="input-label" name="email">Email</label>
                     </div>
                     <div class="input">
-                        <input type="text" name="registration_number" class="input-field" required />
+                        <input type="text" name="Registration_Number" class="input-field" required />
                         <label class="input-label">Registration Number</label>
                     </div>
 
                     <div class="input dropdown">
                         <label for="program" class="input-label">Program of Study</label>
                         <select name="program" id="program" class="input-field">
-                            <option value="Mathematic and Science">Mathematics and Science</option>
+                            <option value="Mathematics and Science">Mathematics and Science</option>
                             <option value="Education">Education</option>
                             <option value="Business">Business</option>
-                            <option value="Arts and Social">Arts and Social</option>
+                            <option value="ArtsandSocial">Arts and Social</option>
                         </select>
 
                     </div>
 
                     <div class="action">
-                        <button class="action-button">Submit</button>
+                        <button type="submit" class="action-button">Submit</button>
                     </div>
                 </form>
             </div>
 
 
 
-            <div class="form-container" id="compliant">
+            <div class="form-container" id="complaint">
 
                 <div class="form-heading">
                     <h1>Complaint Form</h1>
                 </div>
 
 
-                <form class="card-form">
+                <form action="makecomplaint" method="post" action="" class="card-form">
                     <div class="input">
                         <input type="text" name="name" class="input-field" required />
-                        <label class="input-label">Full name</label>
+                        <label class="input-label">Full Name</label>
                     </div>
                     <div class="input">
-                        <input type="text" class="input-field" required />
+                        <input type="text" name="email" class="input-field" required />
                         <label class="input-label" name="email">Email</label>
                     </div>
                     <div class="input">
-                        <input type="text" name="registration_number" class="input-field" required />
+                        <input type="text" name="Registration_Number" class="input-field" required />
                         <label class="input-label">Registration Number</label>
                     </div>
 
                     <div class="input dropdown">
-                        <label for="programtypr" class="input-label">Program Type</label>
-                        <select name="programtype" id="program" class="input-field" required>
+                        <label for="programtype" class="input-label">Program Type</label>
+                        <select name="program" id="program" class="input-field" required>
                             <option value="French">French</option>
                             <option value="Ghanaian Language">Ghanaian Language</option>
                         </select>
@@ -111,8 +111,8 @@
                     </div>
 
                     <div class="input dropdown">
-                        <label for="course" class="input-label">Study Center</label>
-                        <select name="course" id="program" class="input-field" required>
+                        <label for="study_center" class="input-label">Study Center</label>
+                        <select name="study_center" id="study_center" class="input-field"  required>
                             <option value="1">Center 1</option>
                             <option value="2">Center 2</option>
                         </select>
@@ -120,7 +120,7 @@
 
                     <div class="input">
                         <label for="complain_msg">Complaint</label>
-                        <textarea name="complaint_msg" id="complaint_msg" cols="30" rows="10" class="input-field"
+                        <textarea name="complain_msg" id="complaint_msg" cols="30" rows="10" class="input-field"
                             placeholder="Type complaint here" required></textarea>
                     </div>
 
