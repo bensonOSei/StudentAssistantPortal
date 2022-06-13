@@ -27,10 +27,10 @@ from dotenv import dotenv_values
 
 #custom libraries
 from notification import NotifyUser,EmailSchema
+from regex_validation import InputValidator
 
 credentials = dotenv_values(".env")
-
-
+InVal = InputValidator()
 
 app = FastAPI()
 
@@ -74,7 +74,21 @@ async def accessmodules(*,
                         program:str = Form(...)
                         ):
                         
+                        
+                        #validate Input strings
+                        try:
+                            validate_ID = InVal.regID(Registration_Number)
+                            assert validate_ID.status_code == 200 #validate registration id string
+                        except AssertionError:
+                            return validate_ID
 
+                        try:
+                            validate_name = InVal.NameStr(name) #validate name string
+                            assert validate_name.status_code == 200
+                        except AssertionError:
+                            return validate_name
+
+                        #send email message 
                         model = NotifyUser(message = message,subject = subject,email = email)
                         fm = FastMail(model.config)
                         
@@ -97,7 +111,6 @@ async def makecomplaint(*,
                         
                         
                         return {"status":"The system is working 24/7"}
-
 
 
 class EmailSchema(BaseModel):
