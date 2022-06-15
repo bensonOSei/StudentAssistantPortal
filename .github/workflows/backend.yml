@@ -9,7 +9,7 @@ name: PEP8 requirements
 
 on: 
   push: #action runs on push events that target the main and api branches
-    branches: ['main','master','api']
+    branches: [main,master,api]
     paths: #ignore all frontend specific pushes and run for only backend or python pushes
       - '**.py'
       - '!**.html'
