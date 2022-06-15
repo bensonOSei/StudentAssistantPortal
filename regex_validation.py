@@ -1,60 +1,104 @@
-import re
+from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
+from typing import Optional
+from fastapi import Request
+from typing import List
+import re
 
-class InputValidator:
 
-    def NameStr(self,name):
+class ValidateForm:
+
+    """Form validation class; validates user inputs per CoDE's standards
+        e.g Student's registration ID at CoDE is always in the format
+        >   BECE/CR/01/17/0001"""
+
+    def __init__(self, request: Request):
+
+        self.request: Request = request
+        self.errors: List = []
+        self.name: Optional[str] = None
+        self.regID: Optional[str] = None
+
+    async def load_data(self):
+        form = await self.request.form()
+        # since outh works on username field we are considering email as
+        # username
+        self.name = form.get("name")
+        self.regID = form.get("Registration_Number")
+
+    async def is_valid(self):
+        """validates inputs provided
+            Args:
+                None
+            Return:
+                return True if validation is successful else and HTTPException will be raised according to the
+                input Producing the error"""
+
+        # run checks for name field
+        if self.name is not None:
+            try:
+                assert self.validateName().status_code == 200
+            except AssertionError:
+                raise HTTPException(
+                    detail="Provided name is Invalid",
+                    status_code=422)
+        else:
+            self.errors.append("Name is required")
+
+        # run checks for registration id field
+        if self.regID is not None:
+            try:
+                assert self.validateRegID().status_code == 200
+            except AssertionError:
+                raise HTTPException(
+                    detail="Registration ID is Invalid",
+                    status_code=422)
+        else:
+            self.errors.append("A Valid Registration ID is required")
+
+        return True
+
+    def validateName(self):
         """validates Names
-            Ensures that registration ID's (string) follow the convention below
-        >>> BECE/CR/01/17/0001
-        
+        Accepted names > Michael Kofi Armah
+        Unacepted names >> ##############################
+
         Args:
             regID:str: Registration ID
 
         Return:
             JSONResponse with status code 200 if validation passes
             JSONResponse with status code 400 if validation fails"""
+
         pattern = "([a-z]+)*( [a-z]+)*( [a-z]+)*$"
-        x = re.match(pattern,name,re.IGNORECASE)
+        x = re.match(pattern, self.name, re.IGNORECASE)
         
-        try:
-            assert x!=None
-        except AssertionError:
-            return JSONResponse({"message":"Provided name is Ambigious, Name should not contain numbers and symbols"}, status_code = 400)
-        else:
-            return JSONResponse(True,status_code = 200)
+        response = JSONResponse(
+            content="Name :{} is Ambigious".format(
+                self.name),
+            status_code=400) if x is None else JSONResponse(
+            content=True,
+            status_code=200)
         
-    def regID(self,regID):
+        return response
+
+    def validateRegID(self):
         """validates registration ID
-            Ensures that registration ID's follow the convention below
-        >>> BECE/CR/01/17/0001
-        
+        Ensures that registration ID's follow the CoDE's Registration ID convention
+        accepted formats >> BECE/CR/01/17/0001 or BPE/WR/01/18/0020
+
         Args:
             regID:str: Registration ID
-
         Return:
             JSONResponse with status code 200 if validation passes
             JSONResponse with status code 400 if validation fails"""
-        
+
         pattern = "[A-Z]+/[A-Z]+/[0-9]+/[0-9]+/[0-9]+[0-9]"
-        x = re.match(pattern,regID)
+        x = re.match(pattern, self.regID)
         
-        try:
-            assert x!=None
-        except AssertionError:
-            # print("Registration ID is Invalid")
-            return JSONResponse("Invalid Registration ID {}".format(regID),status_code = 400) #status code 400 is used for generic client error
-        else:
-            return JSONResponse(True,status_code = 200)
+        response = JSONResponse(
+            content="Invalid Registration ID {}".format(
+                self.regID), status_code=400) if x is None else JSONResponse(
+            content=True, status_code=200)
         
-    
-
-if __name__ == "__main__":
-    # validator = InputValidator()
-    #output = validator.regID("BECEjk/CR/01/17/0001")
-    # # print(output.status_code)
-    # print(output.message)
-
-    validator = InputValidator()
-    output = validator.name("michael kofi armah junior")
-    print(output.status_code)
+        return response

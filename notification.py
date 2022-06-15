@@ -32,5 +32,5 @@ class NotifyUser:
             attachments= ["./requirements.txt"],
             recipients = email, # List of recipients, as many as you can pass 
             body= message, # message to be sent
-            subtype="html"
+            # subtype="html"
             )
