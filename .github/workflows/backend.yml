@@ -9,14 +9,20 @@ name: PEP8 requirements
 
 on: 
   push: #action runs on push events that target the main and api branches
-    branches:
-      - api
-      - main
+    branches: [main,master,api]
+    paths: #ignore all frontend specific pushes and run for only backend or python pushes
+      - '**.py'
+      - '!**.html'
+      - '!**.js'
+      - '!**.css'
+      - '!templates/**'
       
   pull_request: #action runs on pull_requests that runs on the main branch
     branches:
-      - main
-
+      - '!template'
+    paths:
+      - '**.py'
+      
 jobs:
   build:
     runs-on: ubuntu-latest #runs on ubuntu's latest os
