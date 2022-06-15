@@ -3,6 +3,7 @@ from email import message
 from os import access
 from fastapi import (Depends, FastAPI,Body, File, UploadFile,status,Request,Form,Query)
 from fastapi.staticfiles import StaticFiles
+from fastapi.exceptions import HTTPException
 
 #fastapi_mail dependencies
 from fastapi_mail.email_utils import DefaultChecker
@@ -27,12 +28,16 @@ from dotenv import dotenv_values
 
 #custom libraries
 from notification import NotifyUser,EmailSchema
-from regex_validation import InputValidator
+from regex_validation import ValidateForm
 
 credentials = dotenv_values(".env")
-InVal = InputValidator()
-
+#InVal = InputValidator()
 app = FastAPI()
+
+
+
+class EmailSchema(BaseModel):
+    email: List[EmailStr]
 
 #Universal Fields
 class GeneralBioModel(BaseModel):
@@ -51,7 +56,7 @@ class Program(BaseModel):
 templates = Jinja2Templates(directory="./templates")
 app.mount("/templates/js",StaticFiles(directory= "templates/js"),name = "js")
 app.mount("/templates/style",StaticFiles(directory= "templates/style"),name = "style")
-
+app.mount("/templates/favicon",StaticFiles(directory= "templates/favicon"),name = "favicon")
 
 # message = {"results":"email"}
 message = """<p>'Fixing message repeatetions'</p>"""
@@ -73,29 +78,29 @@ async def accessmodules(*,
                         email:List[EmailStr] = Form(...),
                         program:str = Form(...)
                         ):
-                        
-                        
-                        #validate Input strings
-                        try:
-                            validate_ID = InVal.regID(Registration_Number)
-                            assert validate_ID.status_code == 200 #validate registration id string
-                        except AssertionError:
-                            return validate_ID
 
+                    form = ValidateForm(request)
+                    await form.load_data()
+                    if await form.is_valid(): #if the registration id and email are valid
                         try:
-                            validate_name = InVal.NameStr(name) #validate name string
-                            assert validate_name.status_code == 200
-                        except AssertionError:
-                            return validate_name
+                            form.__dict__.update(msg="An email has been sent to {} :)".format(email))
+                            ######  database script goes here   ####
 
-                        #send email message 
-                        model = NotifyUser(message = message,subject = subject,email = email)
-                        fm = FastMail(model.config)
-                        
-                        await fm.send_message(model.message)
-                        
-                        return {"bio":{"name":name,"Registration Number":Registration_Number,"email":email},"program":program}
-                        #will return url_for(index) with a pop message display
+                            #email script
+                            model = NotifyUser(message = message,subject = subject,email = email)
+                            fm = FastMail(model.config)
+                            await fm.send_message(model.message)
+                            #response = templates.TemplateResponse("index.html", form.__dict__)  #should be the redirection html
+                            return JSONResponse("EMAIL SENT TO {}".format(email))
+                            #return response
+
+                        except HTTPException:
+                            form.__dict__.update(msg="")
+                            form.__dict__.get("errors").append("Incorrect Email or Registration ID")
+                            return JSONResponse("Incorrect Email or Registration ID")
+                            #return templates.TemplateResponse("auth/login.html", form.__dict__) #should be the redirection html
+
+                    return templates.TemplateResponse("index.html", form.__dict__) #should be the redirection html
 
 
 @app.post("/makecomplaint")
@@ -112,14 +117,8 @@ async def makecomplaint(*,
                         
                         return {"status":"The system is working 24/7"}
 
-
-class EmailSchema(BaseModel):
-    email: List[EmailStr]
-
-
 @app.post("/mail")
 async def mail(email:EmailSchema,message:str,subject):
-
 
     model = NotifyUser(message,subject,email)
     fm = FastMail(model.config)
