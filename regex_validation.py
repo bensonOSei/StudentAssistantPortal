@@ -36,23 +36,25 @@ class ValidateForm:
 
         # run checks for name field
         if self.name is not None:
+            
+            validate_name = self.validateName()
             try:
-                assert self.validateName().status_code == 200
+                assert validate_name.status_code == 200
             except AssertionError:
-                raise HTTPException(
-                    detail="Provided name is Invalid",
-                    status_code=422)
+                return validate_name
+        
         else:
             self.errors.append("Name is required")
 
         # run checks for registration id field
         if self.regID is not None:
+
+            validate_regid = self.validateRegID()
             try:
-                assert self.validateRegID().status_code == 200
+                assert validate_regid.status_code == 200
             except AssertionError:
-                raise HTTPException(
-                    detail="Registration ID is Invalid",
-                    status_code=422)
+                return validate_regid
+        
         else:
             self.errors.append("A Valid Registration ID is required")
 
