@@ -48,12 +48,13 @@
         <div class="form-container">
           {% if msg %}
             <div class="form-heading">
-                <h3 id="error_msg">{{ msg }}</h3>
+                <h1 id="error_msg">{{ msg }}</h1>
             </div>
           {% else -%}
 
           {% for error in errors %}
-            <li>{{error}}</li>
+            <h2>{{error}}</h2>
+            <a href = "/" style="text-decoration: none; color:white"><button class="action-button">Return </button> </a>
           {% endfor %}
 
             {% endif %}

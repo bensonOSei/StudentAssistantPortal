@@ -36,6 +36,7 @@ from pydantic import BaseModel, Field, EmailStr
 
 # python type hints
 from typing import List, Optional, Union
+from tomlkit import datetime
 
 # depency to run fastapi
 import uvicorn
@@ -47,6 +48,8 @@ from dotenv import dotenv_values
 from notification import NotifyUser, EmailSchema
 from regex_validation import ValidateForm
 
+#other
+import datetime
 credentials = dotenv_values(".env")
 #InVal = InputValidator()
 app = FastAPI()
@@ -123,7 +126,7 @@ async def accessmodules(*,
 
     form = ValidateForm(request)
     await form.load_data()
-    if await form.is_valid():  # if the registration id and email are valid
+    if await form.is_valid()==True:  # if the registration id and email are valid
 
         try:
 
@@ -172,9 +175,55 @@ async def makecomplaint(*,
                         study_center: str = Form(..., description="The study center of the user"),
                         name: str = Form(...),
                         Registration_Number: str = Form(...),
-                        email: str = Form(...),
+                        email: List[EmailStr] = Form(...),
                         complain_msg: str = Form(..., descrition="Send in your complains Ucc office", max_length=500)):
 
     """make a complaint"""
 
-    return {"status": "The system is working 24/7"}
+    form = ValidateForm(request)
+    await form.load_data()
+    if await form.is_valid()==True:  # if the registration id and email are valid
+
+        try:
+
+            ######  database script goes here   ####
+
+            # email script
+
+            message = "complaint recieved at {}\n\n\n\n YOUR COMPLAINT \n\n{}".format(datetime.datetime.now(),complain_msg)
+            model = NotifyUser(message=message, subject=subject, email=email)
+            fm = FastMail(model.config)
+            await fm.send_message(model.message)
+
+            form.__dict__.update(
+                msg="Complaint Sent")
+
+            response = templates.TemplateResponse(
+                "success.html", context=form.__dict__)
+            return response
+
+        # handle internet connection errors
+        except ConnectionErrors:
+            form.__dict__.update(
+                connection_error="Please Check Your Internet Connection")
+            response = templates.TemplateResponse(
+                "index.html", context=form.__dict__)
+            return response
+
+        except HTTPException:
+            raise HTTPException  # temporary command
+
+            # return templates.TemplateResponse(
+            #     "success.html",context = form.__dict__)  # should be the redirection html
+
+    form.__dict__.update(msg="")
+    form.__dict__.get("errors").append(
+        "Incorrect Name or Registration ID")
+
+    return templates.TemplateResponse(
+        "success.html",
+        form.__dict__)  # should be the redirection html
+
+
+
+    # return {"status": "The system is working 24/7"}
