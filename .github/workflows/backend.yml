@@ -9,7 +9,7 @@ name: PEP8 requirements
 
 on: 
   push: #action runs on push events that target the main and api branches
-    branches: [main,master,api]
+    branches: [main,master]
     paths: #ignore all frontend specific pushes and run for only backend or python pushes
       - '**.py'
       - '!**.html'
@@ -18,11 +18,10 @@ on:
       - '!templates/**'
       
   pull_request: #action runs on pull_requests that runs on the main branch
-    branches:
-      - '!template'
+    branches: [main,master]
     paths:
       - '**.py'
-      
+    
 jobs:
   build:
     runs-on: ubuntu-latest #runs on ubuntu's latest os
@@ -62,7 +61,7 @@ jobs:
       run: |
         autopep8 --in-place --aggressive --aggressive ${{ steps.filter.outputs.py_modified_files }}
       
-    - name: Analysing the code with pylint #pylint get applied to newly added and modified files only
-      if: ${{ steps.filter.outputs.py_modified == 'true' }}
-      run: |
-        pylint ${{ steps.filter.outputs.py_modified_files }}
+#     - name: Analysing the code with pylint #pylint get applied to newly added and modified files only
+#       if: ${{ steps.filter.outputs.py_modified == 'true' }}
+#       run: |
+#         pylint ${{ steps.filter.outputs.py_modified_files }}
