@@ -162,7 +162,7 @@
                 required
               ></textarea>
             </div>
-
+            
             <div class="action">
               <button type="submit" class="action-button">Submit</button>
             </div>
@@ -179,4 +179,11 @@
     </div>
   </body>
   <script src="{{url_for('js',path = '/index.js')}}"></script>
+  
+    {% if connection_error %}
+    <script>
+      alert("Please Check Your Internet Connection"); 
+      </script>
+    {% endif %}
+
 </html>

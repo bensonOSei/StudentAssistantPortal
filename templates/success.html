@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color content =#fff" />
+    <title>Student Assistant Portal | CoDE-UCC</title>
+    <link rel="stylesheet" href="{{url_for('style',path = '/style.css') }}" />
+    <script
+      src="https://kit.fontawesome.com/6db44154cb.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="{{url_for('favicon',path = '/apple-touch-icon.png')}}"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="{{url_for('favicon',path = '/favicon-32x32.png')}}"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="{{url_for('favicon',path = '/favicon-16x16.png')}}"
+    />
+    <link rel="manifest" href="{{url_for('favicon',path = '/site.webmanifest')}}" />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="card">
+        <button id="dark" class="dark-mode"><i class="fas fa-moon"></i></button>
+        <div class="card-image">
+          <h2 class="card-heading">
+            Student Assistant Portal
+            <small>CoDE - UCC</small>
+          </h2>
+        </div>
+
+        <div class="form-container">
+          {% if msg %}
+            <div class="form-heading">
+                <h3 id="error_msg">{{ msg }}</h3>
+            </div>
+          {% else -%}
+
+          {% for error in errors %}
+            <li>{{error}}</li>
+          {% endfor %}
+
+            {% endif %}
+        </div>
+
+      </div>
+
+      <div class="card-info">
+        <p>
+          By submitting this form you are agreeing to our
+          <a href="#">Terms and Conditions</a>
+        </p>
+      </div>
+
+    </div>
+  </body>
+  <script src="{{url_for('js',path='/index.js') }}"></script>
+</html>
