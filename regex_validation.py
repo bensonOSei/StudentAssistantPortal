@@ -1,4 +1,3 @@
-from fastapi.exceptions import HTTPException
 from fastapi.responses import JSONResponse
 from typing import Optional
 from fastapi import Request
@@ -20,6 +19,9 @@ class ValidateForm:
         self.regID: Optional[str] = None
 
     async def load_data(self):
+
+        """get name and registration number from html inputs"""
+
         form = await self.request.form()
         # since outh works on username field we are considering email as
         # username
@@ -63,11 +65,9 @@ class ValidateForm:
     def validateName(self):
         """validates Names
         Accepted names > Michael Kofi Armah
-        Unacepted names >> ##############################
-
+        Unacepted names >> Any name with symbols
         Args:
-            regID:str: Registration ID
-
+            None
         Return:
             JSONResponse with status code 200 if validation passes
             JSONResponse with status code 400 if validation fails"""
@@ -90,7 +90,7 @@ class ValidateForm:
         accepted formats >> BECE/CR/01/17/0001 or BPE/WR/01/18/0020
 
         Args:
-            regID:str: Registration ID
+            None
         Return:
             JSONResponse with status code 200 if validation passes
             JSONResponse with status code 400 if validation fails"""

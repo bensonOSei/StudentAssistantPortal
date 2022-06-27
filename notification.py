@@ -1,9 +1,10 @@
 from typing import List
 from fastapi_mail.email_utils import DefaultChecker
 from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
-from dotenv import dotenv_values
 from pydantic import BaseModel,Field,EmailStr
 
+# some things are meant to be kept as secrets
+from dotenv import dotenv_values
 credentials = dotenv_values(".env")
 
 
@@ -32,6 +33,6 @@ class NotifyUser:
             attachments= ["./requirements.txt"],
             recipients = email, # List of recipients, as many as you can pass 
             body= message, # message to be sent
-            bcc = ["kbenson643@gmail.com"], #General Office Email Address 
+            #bcc = ["kbenson643@gmail.com"], #General Office Email Address 
             # subtype="html"
             )
