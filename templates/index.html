@@ -124,16 +124,26 @@
             <div class="input dropdown">
               <label for="programtype" class="input-label">Program Type</label>
               <select name="program" id="program" class="input-field" required>
-                <option value="French">French</option>
-                <option value="Ghanaian Language">Ghanaian Language</option>
+                
+                <!-- <option value="French">French</option>
+                <option value="Ghanaian Language">Ghanaian Language</option> -->
+
+                {% for programs in resources['programs'] %}
+                <option value = {{programs}}>{{ programs }} </option>
+                {% endfor %}
               </select>
             </div>
 
             <div class="input dropdown">
               <label for="course" class="input-label">Course</label>
               <select name="course" id="program" class="input-field" required>
-                <option value="1">Course 1</option>
-                <option value="2">Course 2</option>
+                <!-- <option value="1">Course 1</option>
+                <option value="2">Course 2</option> -->
+                
+                {% for program in resources['courses'] %}
+                <option value = {{program}}>{{ program }} </option>
+                {% endfor %}
+
               </select>
             </div>
 
@@ -145,8 +155,11 @@
                 class="input-field"
                 required
               >
-                <option value="1">Center 1</option>
-                <option value="2">Center 2</option>
+                <!-- <option value="1">Center 1</option>
+                <option value="2">Center 2</option> -->
+                {% for study_center in resources['study centers'] %}
+                <option value={{study_center}}>{{study_center}}</option>
+                {% endfor %}
               </select>
             </div>
 

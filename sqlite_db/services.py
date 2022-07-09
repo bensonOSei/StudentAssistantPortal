@@ -1,7 +1,6 @@
-from database import SessionLocal, engine
-import database
-import db_models
+from sqlite_db.database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from sqlite_db import database
 
 
 def create_database():

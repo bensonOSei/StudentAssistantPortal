@@ -2,3 +2,4 @@
 .env
 api-env
 __pycache__
+*gsheets_keys.json

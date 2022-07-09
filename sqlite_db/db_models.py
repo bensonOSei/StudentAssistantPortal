@@ -1,12 +1,12 @@
 """
 Author: Eng. Michael Kofi Armah
 Date Created: 17/06/22
-Job : Script for Creating a DB Schema
+Job : Script for Creating a SQLITE DB Schema
 """
 
 import datetime as dt
 import sqlalchemy as sql
-import database
+from . import database
 
 
 class Complaint(database.Base):
