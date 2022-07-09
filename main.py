@@ -272,33 +272,33 @@ async def makecomplaint(*,
             
             load_json()
 
-            google_sheets = GoogleSheets(
-                credentials_file="./google_sheets_plugin/gsheets_keys.json",
-                sheet_key=GOOGLE_SHEET_ID,
-                worksheet_name=GOOGLE_SHEET_NAME)
+            # google_sheets = GoogleSheets(
+            #     credentials_file="google_sheets_plugin/gsheets_keys.json",
+            #     sheet_key=GOOGLE_SHEET_ID,
+            #     worksheet_name=GOOGLE_SHEET_NAME)
 
-            google_sheets.write_header_if_doesnt_exist([
-                "token",
-                "Program",
-                "Course",
-                "Study_Center",
-                "Name",
-                "Registration_ID",
-                "Email",
-                "Complaint",
-                "log_time"])
+            # google_sheets.write_header_if_doesnt_exist([
+            #     "token",
+            #     "Program",
+            #     "Course",
+            #     "Study_Center",
+            #     "Name",
+            #     "Registration_ID",
+            #     "Email",
+            #     "Complaint",
+            #     "log_time"])
 
-            time = get_strtime()
-            form_ = await request.form()
-            google_sheets.append_rows([[token,
-                                        program,
-                                        course,
-                                        study_center,
-                                        name,
-                                        Registration_Number,
-                                        email[0],
-                                        complain_msg,
-                                        time]])
+            # time = get_strtime()
+            # form_ = await request.form()
+            # google_sheets.append_rows([[token,
+            #                             program,
+            #                             course,
+            #                             study_center,
+            #                             name,
+            #                             Registration_Number,
+            #                             email[0],
+            #                             complain_msg,
+            #                             time]])
 
             # email script
 
