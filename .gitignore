@@ -3,4 +3,4 @@
 api-env
 __pycache__
 sqlite_db
-*keys.json
+google_sheets_plugin/keys.json
