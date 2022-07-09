@@ -56,7 +56,7 @@ jobs:
       if: ${{ steps.filter.outputs.py_modified == 'true' }}
       run: pip install -r requirements.txt
       
-    - name: Autop8p #run autopep8 on only modified or added python files
+    - name: Autopep8 #run autopep8 on only modified or added python files
       if: ${{ steps.filter.outputs.py_modified == 'true' }} 
       run: |
         autopep8 --in-place --aggressive --aggressive ${{ steps.filter.outputs.py_modified_files }}
