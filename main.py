@@ -5,14 +5,11 @@ Author : Michael Kofi Armah
 
 # fastapi dependencies
 from email import message
-from os import access
 
 from fastapi import (
     Depends,
     FastAPI,
     Body,
-    File,
-    UploadFile,
     status,
     Request,
     Form,
@@ -22,12 +19,11 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.exceptions import HTTPException
 
 # fastapi_mail dependencies
-from fastapi_mail.email_utils import DefaultChecker
-from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from fastapi_mail import FastMail
 from fastapi_mail.connection import ConnectionErrors
 
 # starlette dependencies
-from starlette.responses import Response, RedirectResponse, JSONResponse, HTMLResponse
+from starlette.responses import Response, JSONResponse, HTMLResponse
 from starlette.requests import Request
 from starlette.templating import Jinja2Templates
 
@@ -35,10 +31,8 @@ from starlette.templating import Jinja2Templates
 from pydantic import BaseModel, Field, EmailStr
 
 # python type hints
-from typing import List, Optional, Union
-
+from typing import List, Optional
 # dependency to run fastapi
-import uvicorn
 
 
 # custom libraries
@@ -47,18 +41,20 @@ from notification import NotifyUser, EmailSchema, complaint_email_msg, complaint
 from regex_validation import ValidateForm
 
 # other
+
+# from sqlite_db.database import SessionLocal, engine
+# from sqlite_db import db_models
+# from sqlalchemy.orm import Session
+# import sqlite_db.services as services
+
 import json
 import datetime
-from sqlite_db.database import SessionLocal, engine
-from sqlite_db import db_models
-from sqlalchemy.orm import Session
-import sqlite_db.services as services
 from google_sheets_plugin.gsheets import GoogleSheets
 
 from dotenv import dotenv_values
 credentials = dotenv_values(".env")
 
-services.create_database()
+# services.create_database() #creates an sqlite db
 
 app = FastAPI()
 
