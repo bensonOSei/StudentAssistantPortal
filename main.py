@@ -269,6 +269,8 @@ async def makecomplaint(*,
             #     credentials_file="./google_sheets_plugin/gsheets_keys.json",
             #     sheet_key=credentials["GOOGLE_SHEET_ID"],
             #     worksheet_name=credentials['GOOGLE_SHEET_NAME'])
+            
+            load_json()
 
             google_sheets = GoogleSheets(
                 credentials_file="./google_sheets_plugin/gsheets_keys.json",
