@@ -41,28 +41,23 @@ class ValidateForm:
                 input Producing the error"""
 
         # run checks for name field
-        if self.name is not None:
+        if self.name or self.regID is not None:
 
-            validate_name = self.validateName()
             try:
+                validate_name = self.validateName()
                 assert validate_name.status_code == 200
             except AssertionError:
                 return validate_name
 
-        else:
-            self.errors.append("Name is required")
-
         # run checks for registration id field
-        if self.regID is not None:
-
-            validate_regid = self.validateRegID()
-            try:
+            try:  
+                validate_regid = self.validateRegID()
                 assert validate_regid.status_code == 200
             except AssertionError:
                 return validate_regid
 
         else:
-            self.errors.append("A Valid Registration ID is required")
+            self.errors.append("Name and Valid Registration ID Fields are required")
 
         return True
 
@@ -100,11 +95,13 @@ class ValidateForm:
             JSONResponse with status code 400 if validation fails"""
 
         pattern = "[A-Z]+/[A-Z]+/[0-9]+/[0-9]+/[0-9]+[0-9]"
-        x = re.match(pattern, self.regID)
+        try:
+            x = re.match(pattern, self.regID)
+            assert x is not None
+            response= JSONResponse(content=True, status_code=200)
 
-        response = JSONResponse(
-            content="Invalid Registration ID {}".format(
-                self.regID), status_code=400) if x is None else JSONResponse(
-            content=True, status_code=200)
-
+        except AssertionError:
+            response = JSONResponse(content="Invalid Registration ID {}".format(
+                self.regID), status_code=400)
+                
         return response

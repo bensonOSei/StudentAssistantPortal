@@ -175,7 +175,7 @@ async def accessmodules(*,
 
     form = ValidateForm(request)
     await form.load_data()
-    if await form.is_valid():  # if the registration id and email are valid
+    if await form.is_valid() == True:  # if the registration id and email are valid
 
         try:
 
@@ -183,9 +183,9 @@ async def accessmodules(*,
 
             # email script
             email: List[EmailStr]
-            time_ = get_strtime()
+            time = get_strtime()
 
-            message = access_module_message.format(time_)
+            message = access_module_message.format(time)
             model = NotifyUser(message=message,
                                subject=access_module_subj, email=email)
 
@@ -241,7 +241,7 @@ async def makecomplaint(*,
 
     form = ValidateForm(request)
     await form.load_data()
-    if await form.is_valid():  # if the registration id and email are valid
+    if await form.is_valid() == True:  # if the registration id and email are valid
 
         try:
             ###generate token #####
