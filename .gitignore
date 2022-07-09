@@ -3,3 +3,5 @@
 api-env
 __pycache__
 *gsheets_keys.json
+sqlite_db
+./gsheets_keys/keys.json

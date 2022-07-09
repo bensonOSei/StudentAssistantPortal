@@ -1,11 +1,24 @@
+"""
+Author: Michael Kofi Armah
+Description: Script Package for sending Email Replies to Users
+"""
+
 from typing import List
 from fastapi_mail.email_utils import DefaultChecker
-from fastapi_mail import FastMail, MessageSchema,ConnectionConfig
-from pydantic import BaseModel,Field,EmailStr
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig
+from pydantic import BaseModel, Field, EmailStr
 
 # some things are meant to be kept as secrets
-from dotenv import dotenv_values
+
+from dotenv import dotenv_values, load_dotenv
+import os
 credentials = dotenv_values(".env")
+
+load_dotenv(".env")
+
+MAIL_USERNAME = os.environ.get("EMAIL")
+MAIL_PASSWORD = os.environ.get("PASSWORD")
+BCC = os.environ.get("BCC")
 
 
 class EmailSchema(BaseModel):
@@ -13,29 +26,36 @@ class EmailSchema(BaseModel):
 
 
 class NotifyUser:
-    def __init__(self,subject:str, message:str, email:list[str],credentials:dict = credentials):
-        
+    def __init__(
+            self,
+            subject: str,
+            message: str,
+            email: list[str],
+            credentials: dict = credentials):
+
         self.credentials = credentials
 
         self.config = ConnectionConfig(
-            MAIL_USERNAME = self.credentials["EMAIL"],
-            MAIL_PASSWORD = self.credentials["PASSWORD"],
-            MAIL_FROM = self.credentials["EMAIL"],
-            MAIL_PORT = 587,
-            MAIL_SERVER = "smtp.gmail.com",
+            # MAIL_USERNAME = self.credentials["EMAIL"],
+            # MAIL_PASSWORD = self.credentials["PASSWORD"],
+            # MAIL_FROM = self.credentials["EMAIL"],
+            MAIL_USERNAME=MAIL_USERNAME,
+            MAIL_PASSWORD=MAIL_PASSWORD,
+            MAIL_FROM=MAIL_USERNAME,
+            MAIL_PORT=587,
+            MAIL_SERVER="smtp.gmail.com",
             MAIL_FROM_NAME="E-LEARNING UNIT COLLAGE OF DISTANCE EDU",
-            MAIL_TLS = True,
-            MAIL_SSL = False,
-            USE_CREDENTIALS = True)
-         
+            MAIL_TLS=True,
+            MAIL_SSL=False,
+            USE_CREDENTIALS=True)
+
         self.message = MessageSchema(
-            subject= subject, # subject of the email
-            #attachments= ["./requirements.txt"],
-            recipients = email, # List of recipients, as many as you can pass 
-            body= message, # message to be sent
-            #bcc = ["kbenson643@gmail.com"], #General Office Email Address 
+            subject=subject,  # subject of the email
+            recipients=email,  # List of recipients, as many as you can pass
+            body=message,  # message to be sent
+            # bcc = [BCC], #Blind carbon copy - General Office's Email Address
             # subtype="html"
-            )
+        )
 
 
 access_module_message = """Module Request server is currently down, Please try again later\n\nTimestamp : {} \n \n  \n \n
@@ -43,14 +63,14 @@ access_module_message = """Module Request server is currently down, Please try a
             Collage of Distance Education
             University of Cape Coast
             """
-subject = "Module Request"
+access_module_subj = "Module Request"
 
 complaint_email_msg = """Hello {name}, your complaint has been recieved by the E-learning Unit -CoDE, be sure to check your email regularly for a feedback on the reported issue.
 
 If no feedback is recieved within 72 hours from the time of recieving this email,
-Please contact the E-learning Unit using the provided complaint token as reference \n 
-Thanks for being part of CoDE 
-                            
+Please contact the E-learning Unit using the provided complaint token as reference \n
+Thanks for being part of CoDE
+
 complaint token: {token}
 Timestamp : {stamp} \n
 \n\n\n

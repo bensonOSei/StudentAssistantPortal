@@ -4,6 +4,7 @@ Author : Michael Kofi Armah
 """
 
 # fastapi dependencies
+from temp import load_json
 from email import message
 
 from fastapi import (
@@ -36,7 +37,14 @@ from typing import List, Optional
 
 
 # custom libraries
-from notification import NotifyUser, EmailSchema, complaint_email_msg, complaint_email_subj,access_module_message
+from notification import (
+    NotifyUser,
+    EmailSchema,
+    complaint_email_msg,
+    complaint_email_subj,
+    access_module_message,
+    access_module_subj
+)
 
 from regex_validation import ValidateForm
 
@@ -50,9 +58,15 @@ from regex_validation import ValidateForm
 import json
 import datetime
 from google_sheets_plugin.gsheets import GoogleSheets
+from google.auth.exceptions import TransportError
+import os
+from dotenv import dotenv_values, load_dotenv
 
-from dotenv import dotenv_values
-credentials = dotenv_values(".env")
+load_dotenv(".env")
+GOOGLE_SHEET_NAME = os.environ.get("GOOGLE_SHEET_NAME")
+GOOGLE_SHEET_ID = os.environ.get("GOOGLE_SHEET_ID")
+
+# credentials = dotenv_values(".env")
 
 # services.create_database() #creates an sqlite db
 
@@ -110,30 +124,40 @@ app.mount(
     name="favicon")
 
 
-@app.get("/")
-def index(request: Request):
-    """Program Homepage"""
-    with open("resources.json","r") as jfile:
+async def get_resources():
+    with open("resources.json", "r") as jfile:
         file = json.load(jfile)
+    return file
 
-    return templates.TemplateResponse("index.html",
-                                      {"request": request,"resources":file})
+
+@app.get("/")
+async def index(request: Request, resources=Depends(get_resources)):
+    """Program Homepage"""
+    # with open("resources.json","r") as jfile:
+    #     file = json.load(jfile)
+    load_json()
+
+    return templates.TemplateResponse(
+        "index.html", {
+            "request": request, "resources": resources})
 
 
 @app.get("/status")
-def form_status(request: Request):
+async def form_status(request: Request):
     """Returns the status of the request after submission"""
     return templates.TemplateResponse("success.html", {"request": request})
 
+
 def get_strtime():
-        time = datetime.datetime.now()
-        time = "{} | {} | {} - {}:{}:{}".format(time.day,
+    time = datetime.datetime.now()
+    time = "{} | {} | {} - {}:{}:{}".format(time.day,
                                             time.month,
                                             time.year,
                                             time.hour,
                                             time.minute,
                                             time.second)
-        return str(time)
+    return str(time)
+
 
 @app.post("/accessmodules")
 async def accessmodules(*,
@@ -159,10 +183,12 @@ async def accessmodules(*,
 
             # email script
             email: List[EmailStr]
-            time = get_strtime()
-            message = access_module_message.format(time)
+            time_ = get_strtime()
+
+            message = access_module_message.format(time_)
             model = NotifyUser(message=message,
-            subject= complaint_email_subj, email=email)
+                               subject=access_module_subj, email=email)
+
             fm = FastMail(model.config)
             await fm.send_message(model.message)
 
@@ -174,9 +200,12 @@ async def accessmodules(*,
             return response
 
         # handle internet connection errors
+
         except ConnectionErrors:
+            resources = await get_resources()
             form.__dict__.update(
-                connection_error="Please Check Your Internet Connection")
+                connection_error="Please Check Your Internet Connection",
+                resources=resources)
             response = templates.TemplateResponse(
                 "index.html", context=form.__dict__)
             return response
@@ -193,14 +222,19 @@ async def accessmodules(*,
 @app.post("/makecomplaint")
 async def makecomplaint(*,
                         request: Request,
-                        program: str = Form(..., description="The program offered by the user"),
-                        course: str = Form(..., description="The course specific to the program given"),
-                        study_center: str = Form(..., description="The study center of the user"),
+                        program: str = Form(...,
+                                            description="The program offered by the student"),
+                        course: str = Form(...,
+                                           description="The course specific to the program given"),
+                        study_center: str = Form(...,
+                                                 description="The study center of the student"),
                         name: str = Form(...),
                         Registration_Number: str = Form(...),
                         email: List[EmailStr] = Form(...),
-                        complain_msg: str = Form(..., descrition="Send in your complains Ucc office", max_length=500),
-                        db: Session = Depends(services.get_db)
+                        complain_msg: str = Form(...,
+                                                 descrition="Send in your complains Ucc office",
+                                                 max_length=500),
+                        # db: Session = Depends(services.get_db)
                         ):
 
     """make a complaint"""
@@ -231,10 +265,15 @@ async def makecomplaint(*,
 
             # google sheets
 
+            # google_sheets = GoogleSheets(
+            #     credentials_file="./google_sheets_plugin/gsheets_keys.json",
+            #     sheet_key=credentials["GOOGLE_SHEET_ID"],
+            #     worksheet_name=credentials['GOOGLE_SHEET_NAME'])
+
             google_sheets = GoogleSheets(
                 credentials_file="./google_sheets_plugin/gsheets_keys.json",
-                sheet_key=credentials["GOOGLE_SHEET_ID"],
-                worksheet_name=credentials['GOOGLE_SHEET_NAME'])
+                sheet_key=GOOGLE_SHEET_ID,
+                worksheet_name=GOOGLE_SHEET_NAME)
 
             google_sheets.write_header_if_doesnt_exist([
                 "token",
@@ -248,7 +287,7 @@ async def makecomplaint(*,
                 "log_time"])
 
             time = get_strtime()
-
+            form_ = await request.form()
             google_sheets.append_rows([[token,
                                         program,
                                         course,
@@ -261,11 +300,13 @@ async def makecomplaint(*,
 
             # email script
 
-            message = "complaint recieved at {}\n\n\n\n YOUR COMPLAINT \n\n{}".format(
-                time, complain_msg)
-            message = complaint_email_msg.format(name = name,token = token, stamp = time,complaint_msg = complain_msg )
+            message = complaint_email_msg.format(
+                name=name, token=token, stamp=time, complaint_msg=complain_msg)
 
-            model = NotifyUser(message=message, subject=complaint_email_subj, email=email)
+            model = NotifyUser(
+                message=message,
+                subject=complaint_email_subj,
+                email=email)
             fm = FastMail(model.config)
             await fm.send_message(model.message)
 
@@ -277,9 +318,19 @@ async def makecomplaint(*,
             return response
 
         # handle internet connection errors
-        except ConnectionErrors:
+        # ConnectError ==> Email
+        # TransportError ==> Google api
+
+        except (ConnectionErrors, TransportError) as internet_connection_error:
+
+            # with open("resources.json","r") as jfile:
+            #     resources = json.load(jfile)
+
+            resources = await get_resources()
             form.__dict__.update(
-                connection_error="Please Check Your Internet Connection")
+                connection_error="Please Check Your Internet Connection",
+                resources=resources)
+
             response = templates.TemplateResponse(
                 "index.html", context=form.__dict__)
             return response
@@ -292,10 +343,8 @@ async def makecomplaint(*,
         "success.html",
         form.__dict__)  # should be the redirection html
 
-    # return {"status": "The system is working 24/7"}
 
-
-@app.get("/database")
-def check_db(db: Session = Depends(services.get_db)):
-    output = db.query(db_models.Complaint)
-    return {"state": output.all()}
+# @app.get("/database")
+# def check_db(db: Session = Depends(services.get_db)):
+#     output = db.query(db_models.Complaint)
+#     return {"state": output.all()}

@@ -1,11 +1,12 @@
 from __future__ import print_function
+from http.client import HTTPException
 
 import os.path
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from typing import List
-import dotenv
 
+import dotenv
 from dotenv import dotenv_values
 credentials = dotenv_values(".env")
 
@@ -28,7 +29,9 @@ class GoogleSheets:
         credentials = ServiceAccountCredentials.from_json_keyfile_name(
             self.credentials_file, self.scope
         )
+
         client = gspread.authorize(credentials)
+
         return client.open_by_key(self.sheet_key).worksheet(self.worksheet_name)
 
     def write_header_if_doesnt_exist(self, columns: List[str]) -> None:

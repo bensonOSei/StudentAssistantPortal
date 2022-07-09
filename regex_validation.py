@@ -1,3 +1,8 @@
+"""
+Author: Michael Kofi Armah
+Description:For validating user inputs in other to avoid cyber attacks on the expose form
+"""
+
 from fastapi.responses import JSONResponse
 from typing import Optional
 from fastapi import Request
@@ -23,8 +28,7 @@ class ValidateForm:
         """get name and registration number from html inputs"""
 
         form = await self.request.form()
-        # since outh works on username field we are considering email as
-        # username
+
         self.name = form.get("name")
         self.regID = form.get("Registration_Number")
 
@@ -38,13 +42,13 @@ class ValidateForm:
 
         # run checks for name field
         if self.name is not None:
-            
+
             validate_name = self.validateName()
             try:
                 assert validate_name.status_code == 200
             except AssertionError:
                 return validate_name
-        
+
         else:
             self.errors.append("Name is required")
 
@@ -56,7 +60,7 @@ class ValidateForm:
                 assert validate_regid.status_code == 200
             except AssertionError:
                 return validate_regid
-        
+
         else:
             self.errors.append("A Valid Registration ID is required")
 
@@ -74,14 +78,14 @@ class ValidateForm:
 
         pattern = "([a-z]+)*( [a-z]+)*( [a-z]+)*$"
         x = re.match(pattern, self.name, re.IGNORECASE)
-        
+
         response = JSONResponse(
             content="Name :{} is Ambigious".format(
                 self.name),
             status_code=400) if x is None else JSONResponse(
             content=True,
             status_code=200)
-        
+
         return response
 
     def validateRegID(self):
@@ -97,10 +101,10 @@ class ValidateForm:
 
         pattern = "[A-Z]+/[A-Z]+/[0-9]+/[0-9]+/[0-9]+[0-9]"
         x = re.match(pattern, self.regID)
-        
+
         response = JSONResponse(
             content="Invalid Registration ID {}".format(
                 self.regID), status_code=400) if x is None else JSONResponse(
             content=True, status_code=200)
-        
+
         return response
