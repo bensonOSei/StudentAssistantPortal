@@ -135,7 +135,7 @@ async def index(request: Request, resources=Depends(get_resources)):
     """Program Homepage"""
     # with open("resources.json","r") as jfile:
     #     file = json.load(jfile)
-    load_json()
+    # load_json()
 
     return templates.TemplateResponse(
         "index.html", {
