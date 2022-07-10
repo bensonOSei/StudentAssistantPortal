@@ -57,7 +57,7 @@ from regex_validation import ValidateForm
 
 import json
 import datetime
-from google_sheets_plugin.gsheets import GoogleSheets
+from google_sheets_plugin.gsheets import GoogleSheets,credentials_file
 from google.auth.exceptions import TransportError
 import os
 from dotenv import dotenv_values, load_dotenv
@@ -264,18 +264,30 @@ async def makecomplaint(*,
             # db.refresh(db_client)
 
             # google sheets
+            # load_json()
 
             # google_sheets = GoogleSheets(
             #     credentials_file="./google_sheets_plugin/gsheets_keys.json",
-            #     sheet_key=credentials["GOOGLE_SHEET_ID"],
-            #     worksheet_name=credentials['GOOGLE_SHEET_NAME'])
-            
-            load_json()
+            #     sheet_key=GOOGLE_SHEET_ID,
+            #     worksheet_name=GOOGLE_SHEET_NAME)
+
 
             google_sheets = GoogleSheets(
-                credentials_file="google_sheets_plugin/gsheets_keys.json",
-                sheet_key=GOOGLE_SHEET_ID,
-                worksheet_name=GOOGLE_SHEET_NAME)
+                            credentials_file= credentials_file,
+                            sheet_key = os.environ.get("GOOGLE_SHEET_ID"),
+                            worksheet_name = os.environ.get('GOOGLE_SHEET_NAME'))
+
+
+            # def decode_resources():
+            #     with open("resources.json",'r') as file:
+            #         data = json.load(file)
+            # resources
+            #     data["study_center"].get(study_center)
+
+            resources = await get_resources()
+            study_center = resources['study centers'].get(study_center)
+            program = resources['programs'].get(program)
+            course = resources['courses'].get(course)
 
             google_sheets.write_header_if_doesnt_exist([
                 "token",
@@ -289,7 +301,7 @@ async def makecomplaint(*,
                 "log_time"])
 
             #time = get_strtime()
-            # time = str(datetime.datetime.now())
+            time = str(datetime.datetime.now())
 
             form_ = await request.form()
             google_sheets.append_rows([[token,
@@ -305,7 +317,7 @@ async def makecomplaint(*,
             # email script
 
             message = complaint_email_msg.format(
-                name=name, token=token, stamp= str(datetime.datetime.now()), complaint_msg=complain_msg)
+                name=name, token=token, stamp= time, complaint_msg=complain_msg)
 
             model = NotifyUser(
                 message=message,
@@ -330,7 +342,7 @@ async def makecomplaint(*,
             # with open("resources.json","r") as jfile:
             #     resources = json.load(jfile)
 
-            resources = await get_resources()
+            # resources = await get_resources()
             form.__dict__.update(
                 connection_error="Please Check Your Internet Connection",
                 resources=resources)
