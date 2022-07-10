@@ -12,7 +12,6 @@ from pydantic import BaseModel, Field, EmailStr
 
 from dotenv import dotenv_values, load_dotenv
 import os
-credentials = dotenv_values(".env")
 
 load_dotenv(".env")
 
@@ -30,15 +29,10 @@ class NotifyUser:
             self,
             subject: str,
             message: str,
-            email: list[str],
-            credentials: dict = credentials):
-
-        self.credentials = credentials
+            email: list[str]):
 
         self.config = ConnectionConfig(
-            # MAIL_USERNAME = self.credentials["EMAIL"],
-            # MAIL_PASSWORD = self.credentials["PASSWORD"],
-            # MAIL_FROM = self.credentials["EMAIL"],
+
             MAIL_USERNAME=MAIL_USERNAME,
             MAIL_PASSWORD=MAIL_PASSWORD,
             MAIL_FROM=MAIL_USERNAME,

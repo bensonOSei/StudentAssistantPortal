@@ -57,10 +57,11 @@ from regex_validation import ValidateForm
 
 import json
 import datetime
-from google_sheets_plugin.gsheets import GoogleSheets,credentials_file
+from google_sheets_plugin.gsheets import GoogleSheets
 from google.auth.exceptions import TransportError
 import os
 from dotenv import dotenv_values, load_dotenv
+import json
 
 load_dotenv(".env")
 GOOGLE_SHEET_NAME = os.environ.get("GOOGLE_SHEET_NAME")
@@ -238,7 +239,8 @@ async def makecomplaint(*,
                         ):
 
     """make a complaint"""
-
+    resources = await get_resources()
+    
     form = ValidateForm(request)
     await form.load_data()
     if await form.is_valid() == True:  # if the registration id and email are valid
@@ -266,25 +268,16 @@ async def makecomplaint(*,
             # google sheets
             # load_json()
 
-            # google_sheets = GoogleSheets(
-            #     credentials_file="./google_sheets_plugin/gsheets_keys.json",
-            #     sheet_key=GOOGLE_SHEET_ID,
-            #     worksheet_name=GOOGLE_SHEET_NAME)
-
+        
+            GOOGLE_CREDENTIALS = os.environ.get("GOOGLE_CREDENTIALS")
+            GOOGLE_CREDENTIALS = dict(json.loads(GOOGLE_CREDENTIALS)) #load environment as string with json and convert to dict
 
             google_sheets = GoogleSheets(
-                            credentials_file= credentials_file,
+                            credentials_file= GOOGLE_CREDENTIALS, #credentials_file,
                             sheet_key = os.environ.get("GOOGLE_SHEET_ID"),
                             worksheet_name = os.environ.get('GOOGLE_SHEET_NAME'))
 
-
-            # def decode_resources():
-            #     with open("resources.json",'r') as file:
-            #         data = json.load(file)
-            # resources
-            #     data["study_center"].get(study_center)
-
-            resources = await get_resources()
+            
             study_center = resources['study centers'].get(study_center)
             program = resources['programs'].get(program)
             course = resources['courses'].get(course)
