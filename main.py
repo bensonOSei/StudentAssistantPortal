@@ -4,7 +4,6 @@ Author : Michael Kofi Armah
 """
 
 # fastapi dependencies
-from temp import load_json
 from email import message
 
 from fastapi import (
